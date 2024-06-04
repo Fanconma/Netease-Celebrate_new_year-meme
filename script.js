@@ -12,20 +12,21 @@ document.getElementById('upload').addEventListener('change', function(event) {
             const userImageWidth = userImage.width;
             const userImageHeight = userImage.height;
 
-            // 将canvas大小设置为用户上传图片的宽度和两张图片的高度和
+            // 将canvas大小设置为用户上传图片的宽度和高度
+            canvas.width = userImageWidth;
+            canvas.height = userImageHeight;
+
+            // 绘制用户上传的图片
+            context.drawImage(userImage, 0, 0, userImageWidth, userImageHeight);
+
+            // 加载叠加图片
             const overlayImage = new Image();
             overlayImage.src = 'overlay.png'; // 假设叠加图片名为overlay.png
             overlayImage.onload = function() {
                 const overlayImageHeight = overlayImage.height * (userImageWidth / overlayImage.width);
 
-                canvas.width = userImageWidth;
-                canvas.height = userImageHeight + overlayImageHeight;
-
-                // 绘制用户上传的图片
-                context.drawImage(userImage, 0, 0, userImageWidth, userImageHeight);
-
-                // 绘制叠加图片
-                context.drawImage(overlayImage, 0, userImageHeight, userImageWidth, overlayImageHeight);
+                // 绘制叠加图片到用户图片的下半部分
+                context.drawImage(overlayImage, 0, userImageHeight - overlayImageHeight, userImageWidth, overlayImageHeight);
             };
 
             overlayImage.onerror = function() {
